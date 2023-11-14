@@ -1,0 +1,60 @@
+import tkinter as tk
+import RPi.GPIO as GPIO
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17, GPIO.OUT)
+GPIO.setup(27, GPIO.OUT)
+GPIO.setup(22, GPIO.OUT)
+GPIO.output(17, GPIO.LOW)
+GPIO.output(27, GPIO.LOW)
+GPIO.output(22, GPIO.LOW)
+
+win = tk.Tk()
+win.title("LED Control by Vijul")
+win.geometry('400x300')
+
+def toggle_green():
+    if GPIO.input(17):
+        GPIO.output(17, GPIO.LOW)
+        green_button.config(text="Green: OFF")
+    else:
+        GPIO.output(17, GPIO.HIGH)
+        GPIO.output(27, GPIO.LOW)
+        GPIO.output(22, GPIO.LOW)
+        green_button.config(text="Green: ON")
+
+def toggle_blue():
+    if GPIO.input(27):
+        GPIO.output(27, GPIO.LOW)
+        blue_button.config(text="Blue: OFF")
+    else:
+        GPIO.output(27, GPIO.HIGH)
+        GPIO.output(17, GPIO.LOW)
+        GPIO.output(22, GPIO.LOW)
+        blue_button.config(text="Blue: ON")
+
+def toggle_red():
+    if GPIO.input(22):
+        GPIO.output(22, GPIO.LOW)
+        red_button.config(text="Red: OFF")
+    else:
+        GPIO.output(22, GPIO.HIGH)
+        GPIO.output(17, GPIO.LOW)
+        GPIO.output(27, GPIO.LOW)
+        red_button.config(text="Red: ON")
+
+green_button = tk.Radiobutton(win, text="Green: OFF", command=toggle_green)
+green_button.pack(pady=10)
+blue_button = tk.Radiobutton(win, text="Blue: OFF", command=toggle_blue)
+blue_button.pack(pady=10)
+red_button = tk.Radiobutton(win, text="Red: OFF", command=toggle_red)
+red_button.pack(pady=10)
+
+def exit_program():
+    GPIO.cleanup()
+    win.quit()
+
+exit_button = tk.Button(win, text="Exit", command=exit_program)
+exit_button.pack(pady=10)
+
+win.mainloop()
